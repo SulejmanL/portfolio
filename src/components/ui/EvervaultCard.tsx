@@ -8,10 +8,14 @@ export const EvervaultCard = ({
   text,
   className,
   children,
+  customCharacters,
+  gradientColor = "from-green-500 to-blue-700",
 }: {
   text?: string;
   className?: string;
   children?: React.ReactNode;
+  customCharacters?: string;
+  gradientColor?: string;
 }) => {
   let mouseX = useMotionValue(0);
   let mouseY = useMotionValue(0);
@@ -19,16 +23,16 @@ export const EvervaultCard = ({
   const [randomString, setRandomString] = useState("");
 
   useEffect(() => {
-    let str = generateRandomString(1500);
+    let str = generateRandomString(1500, customCharacters);
     setRandomString(str);
-  }, []);
+  }, [customCharacters]);
 
   function onMouseMove({ currentTarget, clientX, clientY }: any) {
     let { left, top } = currentTarget.getBoundingClientRect();
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
 
-    const str = generateRandomString(1500);
+    const str = generateRandomString(1500, customCharacters);
     setRandomString(str);
   }
 
@@ -47,6 +51,7 @@ export const EvervaultCard = ({
           mouseX={mouseX}
           mouseY={mouseY}
           randomString={randomString}
+          gradientColor={gradientColor}
         />
         <div className="relative z-10 flex items-center justify-center w-full h-full">
           {children ? (
@@ -63,7 +68,7 @@ export const EvervaultCard = ({
   );
 };
 
-export function CardPattern({ mouseX, mouseY, randomString }: any) {
+export function CardPattern({ mouseX, mouseY, randomString, gradientColor }: any) {
   let maskImage = useMotionTemplate`radial-gradient(250px at ${mouseX}px ${mouseY}px, white, transparent)`;
   let style = { maskImage, WebkitMaskImage: maskImage };
 
@@ -71,7 +76,10 @@ export function CardPattern({ mouseX, mouseY, randomString }: any) {
     <div className="pointer-events-none">
       <div className="absolute inset-0 rounded-2xl [mask-image:linear-gradient(white,transparent)] group-hover/card:opacity-50"></div>
       <motion.div
-        className="absolute inset-0 rounded-2xl bg-gradient-to-r from-green-500 to-blue-700 opacity-0 group-hover/card:opacity-100 backdrop-blur-xl transition duration-500"
+        className={cn(
+          "absolute inset-0 rounded-2xl bg-gradient-to-r opacity-0 group-hover/card:opacity-100 backdrop-blur-xl transition duration-500",
+          gradientColor
+        )}
         style={style}
       />
       <motion.div
@@ -88,10 +96,11 @@ export function CardPattern({ mouseX, mouseY, randomString }: any) {
 
 const characters =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-export const generateRandomString = (length: number) => {
+export const generateRandomString = (length: number, customChars?: string) => {
   let result = "";
+  const chars = customChars || characters;
   for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return result;
 };

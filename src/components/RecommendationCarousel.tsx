@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 
 const recommendations = [
   {
@@ -28,32 +29,76 @@ const recommendations = [
   }
 ];
 
+const CARD_WIDTH = 600;
+const GAP = 32;
+
 export function RecommendationCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.offsetWidth);
+    }
+    const handleResize = () => {
+      if (containerRef.current) setContainerWidth(containerRef.current.offsetWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % recommendations.length);
-    }, 7000); // Rotates every 7 seconds
+    }, 10000);
     return () => clearInterval(timer);
   }, []);
 
+  // Calculate the offset to center the currentIndex card
+  // offset = (containerWidth / 2) - (cardWidth / 2) - (index * (cardWidth + gap))
+  const offset = (containerWidth / 2) - (CARD_WIDTH / 2) - (currentIndex * (CARD_WIDTH + GAP));
+
   return (
-    <div className="carousel-container">
-      <div className="carousel-track">
-        {recommendations.map((rec, index) => (
-          <div
+    <div ref={containerRef} className="carousel-container relative overflow-hidden h-[500px] flex flex-col items-center">
+      <div className="w-full h-full flex items-center">
+        <motion.div 
+          className="flex gap-8"
+          animate={{ x: offset }}
+          transition={{ type: "spring", stiffness: 200, damping: 25 }}
+        >
+          {recommendations.map((rec, index) => {
+            const isActive = index === currentIndex;
+            return (
+              <motion.div
+                key={index}
+                animate={{
+                  scale: isActive ? 1 : 0.75,
+                  opacity: isActive ? 1 : 0.4,
+                  filter: isActive ? "blur(0px)" : "blur(4px)",
+                }}
+                className="w-[600px] flex-shrink-0"
+              >
+                <div className={`carousel-card project-card h-full transition-all duration-700 ${isActive ? 'active-glow bg-black/80' : 'bg-black/40 border-white/5'}`}>
+                  <p className="quote-text italic text-slate-200 py-2">"{rec.text}"</p>
+                  <div className="mt-auto pt-6 border-t border-white/5">
+                    <h4 className="author-text text-xl font-bold text-orange-500">- {rec.author}</h4>
+                    <p className="text-slate-400 text-sm mt-1">{rec.title}</p>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      </div>
+      
+      <div className="carousel-indicators flex gap-3 mt-12">
+        {recommendations.map((_, index) => (
+          <button
             key={index}
-            className={`carousel-slide ${index === currentIndex ? 'active' : ''}`}
-          >
-            {index === currentIndex && (
-              <div className="project-card recommendation-card">
-                <p className="project-desc quote-text">"{rec.text}"</p>
-                <h4 className="project-title author-text">- {rec.author}</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{rec.title}</p>
-              </div>
-            )}
-          </div>
+            onClick={() => setCurrentIndex(index)}
+            className={`indicator h-2.5 rounded-full transition-all duration-300 ${index === currentIndex ? 'w-10 bg-orange-500 shadow-[0_0_15px_#f97316]' : 'w-2.5 bg-white/20'}`}
+          />
         ))}
       </div>
     </div>
