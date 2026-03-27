@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+@import "tailwindcss";
+
 
 :root {
   --bg-color: #050505; /* Deep dark theme */
@@ -35,33 +37,11 @@ body {
   flex-direction: column;
 }
 
-/* Background 3D Canvas */
-.spline-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: auto; /* Allow interactions with robot */
-}
-
-.spline-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(5, 5, 5, 0.85); /* Darkens the bright robot background */
-  pointer-events: none; /* Let mouse clicks pass through to the robot */
-  z-index: 5;
-}
-
 /* Content Overlay */
 .content-overlay {
   position: relative;
   z-index: 10;
-  pointer-events: none; /* Let mouse clicks pass through the invisible overlay to the robot */
+  pointer-events: none; /* Let mouse clicks pass through the invisible overlay to the beams */
   display: flex;
   flex-direction: column;
   padding: 4rem 8rem;
@@ -319,11 +299,20 @@ h1 {
   background: rgba(10, 10, 10, 0.3);
 }
 
-/* Hide Spline Watermark */
+/* Hide Spline Watermark — Advanced Clipper */
 #spline-watermark, 
 .spline-watermark,
 a[href*="spline.design"] {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Fallback: If watermark is inside shadow DOM, we clip the bottom bits of the container */
+.contact-spline, .spline-background {
+  mask-image: linear-gradient(to bottom, black calc(100% - 30px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 30px), transparent 100%);
 }
 
 .contact-form {

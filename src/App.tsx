@@ -1,16 +1,11 @@
 import { SplineScene } from './components/SplineScene';
 import { RecommendationCarousel } from './components/RecommendationCarousel';
+import { BackgroundBeamsWithCollision } from './components/ui/BackgroundBeamsWithCollision';
 import './index.css';
 
 function App() {
   return (
-    <div className="app-container">
-      {/* 3D Spline Interactive Background */}
-      <div className="spline-background">
-        <SplineScene scene="https://prod.spline.design/rRfM6hHnZTjYqvNP/scene.splinecode" />
-        <div className="spline-overlay"></div>
-      </div>
-
+    <BackgroundBeamsWithCollision className="app-container">
       {/* Glassmorphism UI Overlay */}
       <div className="content-overlay">
         <header className="navbar">
@@ -86,13 +81,15 @@ function App() {
             </div>
           </section>
 
-          <section className="recommendations" style={{ marginTop: '6rem' }}>
-            <h2 className="section-title" style={{ textAlign: 'center' }}>Recommendations</h2>
-            <RecommendationCarousel />
-          </section>
+
         </main>
 
-        <footer id="contact" className="contact-footer">
+        <section className="recommendations" style={{ padding: '6rem 2rem', borderTop: '1px solid var(--glass-border)', background: 'rgba(5, 5, 5, 0.4)' }}>
+          <h2 className="section-title" style={{ textAlign: 'center', marginTop: '0' }}>Recommendations</h2>
+          <RecommendationCarousel />
+        </section>
+
+        <footer id="contact" className="contact-footer" style={{ borderTop: 'none', marginTop: '0' }}>
           <div className="contact-layout">
             <div className="contact-container">
               <h2>Let's Build Something Great</h2>
@@ -105,6 +102,9 @@ function App() {
                   <input type="email" name="Email" placeholder="Your Email" required />
                 </div>
                 <div className="form-group">
+                  <input type="text" name="Subject" placeholder="Subject" />
+                </div>
+                <div className="form-group">
                   <textarea name="Message" placeholder="Your Message" rows={4} required></textarea>
                 </div>
                 <button type="submit" className="btn-primary form-submit">Send Message</button>
@@ -115,10 +115,9 @@ function App() {
               <SplineScene scene="https://prod.spline.design/AcBN9ShBZkutlYBz/scene.splinecode" />
             </div>
           </div>
-
         </footer>
       </div>
-    </div>
+    </BackgroundBeamsWithCollision>
   );
 }
 
