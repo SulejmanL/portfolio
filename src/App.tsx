@@ -1,6 +1,7 @@
 import { SplineScene } from './components/SplineScene';
 import { RecommendationCarousel } from './components/RecommendationCarousel';
 import { BackgroundBeamsWithCollision } from './components/ui/BackgroundBeamsWithCollision';
+import { EvervaultCard, Icon } from './components/ui/EvervaultCard';
 import './index.css';
 
 function App() {
@@ -17,12 +18,25 @@ function App() {
         </header>
 
         <main>
-          <section className="hero">
-            <h1>Sulejman Lekovic</h1>
-            <p>
-              Dynamic Customer Success & AI Automation Professional with over 7 years of experience across SaaS and technology platforms. I bridge the gap between technical solutions and customer needs by building intelligent workflows and automated pipelines that drive real business impact.
-            </p>
-            <a href="#contact" className="btn-primary" style={{textDecoration: 'none'}}>Get In Touch</a>
+          <section className="hero relative p-4 md:p-10 border border-white/[0.1] rounded-3xl overflow-visible">
+            <Icon className="absolute h-10 w-10 -top-5 -left-5 text-orange-500 z-20" />
+            <Icon className="absolute h-10 w-10 -bottom-5 -left-5 text-orange-500 z-20" />
+            <Icon className="absolute h-10 w-10 -top-5 -right-5 text-orange-500 z-20" />
+            <Icon className="absolute h-10 w-10 -bottom-5 -right-5 text-orange-500 z-20" />
+            
+            <EvervaultCard className="hero-card-effect">
+              <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto p-4 md:p-8">
+                <h1 className="lg:text-7xl md:text-5xl text-4xl font-bold mb-6 text-white tracking-tight drop-shadow-2xl">
+                  Sulejman Lekovic
+                </h1>
+                <p className="text-xl md:text-2xl font-light text-slate-200 leading-relaxed mb-8 backdrop-blur-sm">
+                  Dynamic Customer Success & AI Automation Professional with over 7 years of experience across SaaS and technology platforms. I bridge the gap between technical solutions and customer needs by building intelligent workflows and automated pipelines that drive real business impact.
+                </p>
+                <div className="flex gap-4">
+                  <a href="#contact" className="btn-primary" style={{textDecoration: 'none'}}>Get In Touch</a>
+                </div>
+              </div>
+            </EvervaultCard>
           </section>
 
           <section className="featured-projects">

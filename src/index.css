@@ -97,10 +97,11 @@ header.navbar {
 }
 
 .hero {
-  max-width: 600px;
-  margin-bottom: 8rem;
+  max-width: 1000px;
+  margin: 0 auto 8rem auto;
   animation: fadeInLeft 1s ease-out 0.3s forwards;
   opacity: 0;
+  width: 100%;
 }
 
 h1 {
@@ -394,4 +395,13 @@ a[href*="spline.design"] {
     padding: 2rem;
   }
   h1 { font-size: 3rem; }
+  .content-overlay {
+    padding: 2rem 1rem;
+  }
+}
+
+.hero-card-effect {
+  background: rgba(10, 10, 10, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
